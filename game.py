@@ -4,6 +4,10 @@ class Game:
     """
 
     def __init__(self, impossible_chars: str = None):
+        """
+        Инциализация игры
+        :param impossible_chars: строка с "невозможными" буквами
+        """
         self._last_word = None
         self._impossible_chars = impossible_chars.lower() if impossible_chars else []
 
