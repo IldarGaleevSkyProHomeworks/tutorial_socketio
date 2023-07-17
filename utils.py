@@ -2,6 +2,13 @@ DEFAULT_USERNAME = "Анонимус"
 
 
 def init_next_player(sio, game, playersmanager):
+    """
+    Переключение игрока и отправка сообщения о событии
+    :param sio: socketio.Server
+    :param game: игра
+    :param playersmanager: менеджер игроков
+    :return:
+    """
     if next_player := playersmanager.get_next_player():
 
         last_word = game.last_word
@@ -26,6 +33,13 @@ def init_next_player(sio, game, playersmanager):
 
 
 def send_exit_message(sid, sio, playersmanager):
+    """
+    отправка сообщения об отключении игрока
+    :param sio: socketio.Server
+    :param game: игра
+    :param playersmanager: менеджер игроков
+    :return:
+    """
     player_info = playersmanager.get_player_name_by_sid(sid)
 
     if player_info:
@@ -40,6 +54,12 @@ def send_exit_message(sid, sio, playersmanager):
 
 
 def send_hello_message(sid, sio):
+    """
+    отправка приветствия
+    :param sid: id клиента
+    :param sio: socketio.Server
+    :return:
+    """
     sio.emit(
         event='message',
         to=sid,
@@ -48,6 +68,14 @@ def send_hello_message(sid, sio):
 
 
 def send_registered_message(sid, player_name, sio, playersmanager):
+    """
+    регистрация нового игрока
+    :param sid: id клиента
+    :param player_name: имя игрока
+    :param sio: socketio.Server
+    :param playersmanager: менеджер игроков
+    :return:
+    """
     if player_name:
         playersmanager.register(sid, player_name)
         personal_message = f"Дарова, {player_name}"
@@ -71,6 +99,15 @@ def send_registered_message(sid, player_name, sio, playersmanager):
 
 
 def check_word(sid, word, sio, game, playersmanager):
+    """
+    проверка слова
+    :param sid: id клиента
+    :param word: проверяемое слово
+    :param sio: socketio.Server
+    :param game: игра
+    :param playersmanager: менеджер игроков
+    :return:
+    """
     if playersmanager.is_current_player(sid):
 
         player_name = playersmanager.get_player_name_by_sid(sid)
