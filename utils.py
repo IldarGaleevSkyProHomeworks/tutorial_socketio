@@ -113,7 +113,7 @@ def check_word(sid, word, sio, game, playersmanager):
         player_name = playersmanager.get_player_name_by_sid(sid)
         is_correct = False
 
-        if not word or len(word) < 2:
+        if not word or len(word) < 2 or not word.isalpha():
             personal_message = "Штааа!? Я тебя не понял, давай заново и нормальными словами.."
             public_message = f"{player_name} втирает нам какую-то дичь, послушаем его еще раз."
         elif game.test_word(word):
