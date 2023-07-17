@@ -1,11 +1,18 @@
 class Game:
+    """
+    Объект, представляющий игру в "Города"
+    """
 
     def __init__(self, impossible_chars: str = None):
         self._last_word = None
-
         self._impossible_chars = impossible_chars.lower() if impossible_chars else []
 
     def test_word(self, word: str) -> bool:
+        """
+        Проверка слова на правильность
+        :param word: проверяемое слово (не чувствительно к регистру)
+        :return:
+        """
 
         if not word:
             raise ValueError("Word is empty")
@@ -28,6 +35,10 @@ class Game:
 
     @property
     def last_word(self) -> str | None:
+        """
+        Последнее загаданное слово
+        :return:
+        """
         return self._last_word
 
 
