@@ -45,7 +45,7 @@ def make_turn(sid, data):
 
 @sio.on("who")
 def make_turn(sid, data):
-    utils.active_player(sid, sio, game, playersmanager)
+    utils.get_active_player(sid, sio, playersmanager)
 
 
 if __name__ == '__main__':

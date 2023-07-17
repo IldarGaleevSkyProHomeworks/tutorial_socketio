@@ -112,8 +112,15 @@ def check_word(sid, word, sio, game, playersmanager):
         )
 
 
-def active_player(sid, sio, game, playermanager):
-    if curr_player_name := playermanager.get_current_player_name():
+def get_active_player(sid, sio, playersmanager):
+    """
+    запрос активного игрока
+    :param sid: id клиента
+    :param sio: socketio.Server
+    :param playersmanager: менеджер игроков
+    :return:
+    """
+    if curr_player_name := playersmanager.get_current_player_name():
         message = f"Сейчас все ждут \"{curr_player_name}\""
     else:
         message = "Хммм... ничего не знаю, отстань.."
