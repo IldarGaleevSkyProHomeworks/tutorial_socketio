@@ -4,15 +4,29 @@ Player = namedtuple('Player', ['sid', 'name'])
 
 
 class PlayersManager:
+    """
+    Менеджер игроков
+    """
 
     def __init__(self):
         self._players_list = {}
         self._last_player = None
 
     def register(self, sid, name):
+        """
+        Регистрация игрока
+        :param sid: id
+        :param name: Имя
+        :return:
+        """
         self._players_list[sid] = name
 
     def logout(self, sid):
+        """
+        Удаление игрока
+        :param sid: id
+        :return:
+        """
         if sid in self._players_list:
             del self._players_list[sid]
 
@@ -20,6 +34,10 @@ class PlayersManager:
             self._last_player = None
 
     def get_next_player(self) -> Player | None:
+        """
+        Получить следующего игрока
+        :return: id и Имя игрока либо None если не удалось найти игроков
+        """
         if not self._players_list:
             return None
 
@@ -36,15 +54,29 @@ class PlayersManager:
         return Player(sid=self._last_player, name=self._players_list[self._last_player])
 
     def is_current_player(self, sid):
+        """
+        Проверка активного игрока по id
+        :param sid:
+        :return:
+        """
         return sid == self._last_player
 
     def get_current_player_name(self):
+        """
+        Получить имя активного игрока
+        :return:
+        """
         if self._last_player:
             return self._players_list[self._last_player]
 
-    def get_player_name_by_sid(self, item):
-        if item in self._players_list:
-            return self._players_list[item]
+    def get_player_name_by_sid(self, sid):
+        """
+        Получить имя игрока по id
+        :param sid: id игрока
+        :return:
+        """
+        if sid in self._players_list:
+            return self._players_list[sid]
         return None
 
     def __len__(self):
