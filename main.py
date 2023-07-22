@@ -30,6 +30,10 @@ def disconnect(sid):
 
 @sio.on("register")
 def register(sid, data):
+    if not utils.is_data_valid(sid, sio, data):
+        print(sid, "sent invalid data")
+        return
+
     player_name = data.get('player_name', None)
     utils.send_registered_message(sid, player_name, sio, playersmanager)
     if len(playersmanager) == 1:
@@ -38,7 +42,11 @@ def register(sid, data):
 
 
 @sio.on("login")
-def register(sid, data):
+def login(sid, data):
+    if not utils.is_data_valid(sid, sio, data):
+        print(sid, "sent invalid data")
+        return
+
     personal_key = data.get('pk', None)
     if utils.send_logined_message(sid, personal_key, sio, playersmanager):
         if len(playersmanager) == 1:
@@ -50,12 +58,16 @@ def register(sid, data):
 
 @sio.on("make_turn")
 def make_turn(sid, data):
+    if not utils.is_data_valid(sid, sio, data):
+        print(sid, "sent invalid data")
+        return
+
     word = data.get('word', None)
     utils.check_word(sid, word, sio, game, playersmanager)
 
 
 @sio.on("who")
-def make_turn(sid, data):
+def who(sid, data):
     utils.get_active_player(sid, sio, playersmanager)
 
 
