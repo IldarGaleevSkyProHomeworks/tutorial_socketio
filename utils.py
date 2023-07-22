@@ -210,3 +210,14 @@ def get_active_player(sid, sio, playersmanager):
         to=sid,
         data={"message": message}
     )
+
+
+def is_data_valid(sid, sio, data) -> bool:
+    if type(data) is not dict:
+        sio.emit(
+            event='message',
+            to=sid,
+            data={"message": "Прекрати слать мне ерунду! Присылай JSON- тогда поговорим..."}
+        )
+        return False
+    return True
