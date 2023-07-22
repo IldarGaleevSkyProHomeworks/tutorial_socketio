@@ -37,6 +37,17 @@ def register(sid, data):
     print(sid, "registered")
 
 
+@sio.on("login")
+def register(sid, data):
+    personal_key = data.get('pk', None)
+    if utils.send_logined_message(sid, personal_key, sio, playersmanager):
+        if len(playersmanager) == 1:
+            utils.init_next_player(sio, game, playersmanager)
+        print(sid, "logined")
+    else:
+        print(sid, "login failed")
+
+
 @sio.on("make_turn")
 def make_turn(sid, data):
     word = data.get('word', None)

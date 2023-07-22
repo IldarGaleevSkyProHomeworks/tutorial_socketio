@@ -64,7 +64,9 @@ def send_hello_message(sid, sio):
         event='message',
         to=sid,
         data={"message": "Салют! Теперь отправь событие 'register' "
-                         "с json-объектом: {\"player_name\": \"Your name\"}"})
+                         "с json-объектом: {\"player_name\": \"Your name\"} "
+                         "или 'login' "
+                         "с json-объектом: {\"pk\": \"Your_personal_key\"}"})
 
 
 def send_registered_message(sid, player_name, sio, playersmanager):
@@ -77,8 +79,8 @@ def send_registered_message(sid, player_name, sio, playersmanager):
     :return:
     """
     if player_name:
-        playersmanager.register(sid, player_name)
-        personal_message = f"Дарова, {player_name}"
+        pk, _ = playersmanager.register(sid, name=player_name)
+        personal_message = f"Дарова, {player_name}, твой ключ доступа: {pk}"
         public_message = f"В наш уютный кружок залетает {player_name}, посмотрим на что он способен!"
     else:
         personal_message = "Моя твоя не понимать... ты чего мне прислал?"
@@ -96,6 +98,47 @@ def send_registered_message(sid, player_name, sio, playersmanager):
             data={"message": public_message},
             skip_sid=sid
         )
+
+
+def send_logined_message(sid, personal_key, sio, playersmanager) -> bool:
+    """
+    регистрация нового игрока
+    :param sid: id клиента
+    :param personal_key: персональный ключ игрока
+    :param sio: socketio.Server
+    :param playersmanager: менеджер игроков
+    :return:
+    """
+    is_logined = False
+    public_message = None
+
+    if personal_key:
+        _, player = playersmanager.register(sid, pk=personal_key)
+    else:
+        player = None
+        personal_message = "Моя твоя не понимать... ты чего мне прислал?"
+
+    if player:
+        personal_message = f"С возвращением, {player.name}"
+        public_message = f"К нам вернулся {player.name}!"
+        is_logined = True
+    else:
+        personal_message = "Нет у меня такого ключа... падазрительна, ты чего задумал!? 😑"
+
+    sio.emit(
+        event='message',
+        to=sid,
+        data={"message": personal_message}
+    )
+
+    if public_message:
+        sio.emit(
+            event='message',
+            data={"message": public_message},
+            skip_sid=sid
+        )
+
+    return is_logined
 
 
 def check_word(sid, word, sio, game, playersmanager):
